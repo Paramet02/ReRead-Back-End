@@ -38,7 +38,7 @@
 
     ```bash
     npm install  # ติดตั้ง dependencies ที่จำเป็น
-    npm start    # รัน server
+    node index.js    # รัน server
     ```
 
     เมื่อรันคำสั่งนี้, server จะเริ่มทำงานที่ `http://localhost:5000` (หรือพอร์ตที่กำหนดในโค้ดของคุณ)

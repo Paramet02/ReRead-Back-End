@@ -18,7 +18,6 @@ const connectDb = async () => {
   }
 };
 
-// ส่งออก client และฟังก์ชันการเชื่อมต่อ
 module.exports = {
   client,
   connectDb

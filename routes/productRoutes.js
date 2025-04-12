@@ -1,16 +1,17 @@
-// routes/productRoutes.js
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
-const productController = require('../controllers/ProductController');
-const auth = require('../middlewares/authenticateToken');
-const isSeller = require('../middlewares/Isseller');
-const upload = require('../middlewares/upload');
+const controller = require('../controllers/ProductController');
+const { uploadToCloudinary } = require('../config/cloudinary');
+// const verifySeller = require('../middleware/authMiddleware');
+const upload = multer({ dest: 'uploads/' });
 
-
-router.post('/', auth, isSeller, upload.single('image'), productController.createProduct);
-router.get('/', productController.getAllProducts);
-router.get('/:id', productController.getProductById);
-router.put('/:id', auth, isSeller, upload.single('image'), productController.updateProduct);
-router.delete('/:id', auth, isSeller, productController.deleteProduct);
+router.get('/products', controller.getAll);
+router.get('/products/:id', controller.getById);
+router.post('/products', upload.single('image'), async (req, res, next) => {
+  const url = await uploadToCloudinary(req.file.path);
+  req.image_url = url;
+  next();
+}, controller.create);
 
 module.exports = router;

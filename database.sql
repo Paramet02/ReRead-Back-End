@@ -15,7 +15,7 @@ CREATE TABLE products (
     description TEXT,                       -- รายละเอียดของ
     price NUMERIC(10, 2) NOT NULL,
     condition VARCHAR(50),                   -- เช่น 'new', 'used'
-    image VARCHAR(255),
+    image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

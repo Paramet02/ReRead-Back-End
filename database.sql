@@ -6,6 +6,7 @@ CREATE TABLE users (
     role VARCHAR(50),                        -- เช่น 'buyer', 'seller'
     is_seller BOOLEAN DEFAULT FALSE,         -- สิทธิ์ในการขาย
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    citizen_id VARCHAR(13)
 );
 
 -- PRODUCTS
@@ -16,6 +17,8 @@ CREATE TABLE products (
     price NUMERIC(10, 2) NOT NULL,
     condition VARCHAR(50),                   -- เช่น 'new', 'used'
     image_url VARCHAR(255),
+    user_id INTEGER,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

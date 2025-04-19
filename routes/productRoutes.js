@@ -8,6 +8,7 @@ const model = require("../model/productModel")
 const upload = multer({ dest: 'uploads/' });
 
 
+router.get('/allproducts', controller.getAll)
 router.get('/myproducts', authMiddleware, model.getProductsByUser);
 router.post('/products',
   authMiddleware, 

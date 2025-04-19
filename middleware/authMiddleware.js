@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { client } = require('../config/db'); // เพิ่มเพื่อเช็ค is_seller จาก DB
+const { client } = require('../config/db'); 
 require('dotenv').config();
 
 const authMiddleware = async (req, res, next) => {
@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 🔎 ดึง is_seller จาก database
+
     const result = await client.query('SELECT id, is_seller FROM users WHERE id = $1', [decoded.id]);
 
     if (result.rows.length === 0) {

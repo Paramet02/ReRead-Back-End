@@ -4,7 +4,8 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50),                        -- เช่น 'buyer', 'seller'
-    is_seller BOOLEAN DEFAULT FALSE,         -- สิทธิ์ในการขาย
+    is_seller BOOLEAN DEFAULT FALSE,
+    stripe_customer_id VARCHAR(255),         -- เพิ่มสำหรับ Stripe
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -12,7 +13,7 @@ CREATE TABLE users (
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,                       -- รายละเอียดของ
+    description TEXT,
     price NUMERIC(10, 2) NOT NULL,
     condition VARCHAR(50),                   -- เช่น 'new', 'used'
     image_url VARCHAR(255),
@@ -48,14 +49,31 @@ CREATE TABLE order_items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- PAYMENTS
+-- PAYMENTS (รองรับ Stripe)
 CREATE TABLE payments (
     id SERIAL PRIMARY KEY,
     order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
-    payment_method VARCHAR(50),              -- เช่น 'credit_card', 'bank_transfer'
-    payment_status VARCHAR(50),              -- เช่น 'paid', 'pending'
+    payment_method VARCHAR(50),              -- เช่น 'card', 'bank_transfer'
+    payment_status VARCHAR(50),              -- เช่น 'succeeded', 'processing', 'failed'
     amount NUMERIC(10, 2),
-    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    stripe_payment_intent_id VARCHAR(255),
+    stripe_customer_id VARCHAR(255),
+    stripe_payment_method_id VARCHAR(255),
+    provider_response JSONB                  -- เก็บ raw response จาก Stripe
+);
+
+-- PAYMENT METHODS (เก็บบัตรของผู้ใช้)
+CREATE TABLE payment_methods (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    stripe_payment_method_id VARCHAR(255) NOT NULL,
+    brand VARCHAR(50),
+    last4 VARCHAR(4),
+    exp_month INTEGER,
+    exp_year INTEGER,
+    is_default BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- NOTIFICATIONS
@@ -87,4 +105,13 @@ CREATE TABLE phone_numbers (
     phone_number VARCHAR(20) NOT NULL,
     phone_type VARCHAR(50),                  -- เช่น 'mobile', 'home', 'work'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- STRIPE EVENTS (ใช้สำหรับ webhook debug)
+CREATE TABLE stripe_events (
+    id SERIAL PRIMARY KEY,
+    event_id VARCHAR(255) UNIQUE NOT NULL,
+    event_type VARCHAR(255),
+    payload JSONB NOT NULL,
+    received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

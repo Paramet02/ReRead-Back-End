@@ -5,7 +5,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50),                        -- เช่น 'buyer', 'seller'
     is_seller BOOLEAN DEFAULT FALSE,         -- สิทธิ์ในการขาย
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     stripe_customer_id VARCHAR(255),         -- เพิ่มสำหรับ Stripe
     citizen_id VARCHAR(13)
 );
@@ -19,7 +19,7 @@ CREATE TABLE products (
     condition VARCHAR(50),                   -- เช่น 'new', 'used'
     image_url VARCHAR(255),
     user_id INTEGER,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

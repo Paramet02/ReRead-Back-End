@@ -2,6 +2,7 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY, 
     email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50),                        -- เช่น 'buyer', 'seller'
     is_seller BOOLEAN DEFAULT FALSE,         -- สิทธิ์ในการขาย
@@ -19,8 +20,10 @@ CREATE TABLE products (
     condition VARCHAR(50),                   -- เช่น 'new', 'used'
     image_url VARCHAR(255),
     user_id INTEGER,
+    seller VARCHAR(50),
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    CONSTRAINT fk_seller_username FOREIGN KEY (seller) REFERENCES users(username) ON DELETE CASCADE,
 );
 
 -- CART ITEMS

@@ -10,14 +10,15 @@ exports.getAll = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const { name, description, price, condition } = req.body;
+  const { name, description, price, condition,category } = req.body;
   const image_url = req.image_url;
 
   if (!req.user || !req.user.id) {
     return res.status(401).json({ message: 'Unauthorized: No user ID found' });
   }
 
-  const user_id = req.user.id;  
+  const user_id = req.user.id; 
+  const seller = req.user.username; 
 
   try {
    
@@ -27,7 +28,9 @@ exports.create = async (req, res) => {
       price,
       condition,
       image_url,
-      user_id,  // ส่งค่า user_id ไปในการสร้างสินค้า
+      category,
+      user_id,
+      seller 
     });
 
     res.status(201).json(newProduct);

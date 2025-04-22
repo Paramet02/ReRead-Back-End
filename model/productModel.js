@@ -36,12 +36,12 @@ exports.deleteProduct = async (id) => {
 };
 
 exports.createProduct = async (product) => {
-  const { name, description, price, condition, image_url, user_id } = product;
+  const { name, description, price, condition, image_url, category, user_id ,seller} = product;
 
   const res = await client.query(
-    `INSERT INTO products (name, description, price, condition, image_url, user_id)
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [name, description, price, condition, image_url, user_id]
+    `INSERT INTO products (name, description, price, condition, image_url, category, user_id, seller)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+    [name, description, price, condition, image_url, category, user_id, seller]
   );
 
   return res.rows[0];  // คืนค่าผลลัพธ์สินค้าที่ถูกสร้างขึ้น

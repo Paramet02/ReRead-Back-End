@@ -2,11 +2,12 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY, 
     email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL UNIQUE,     -- เพิ่ม username
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(50),                        -- เช่น 'buyer', 'seller'
-    is_seller BOOLEAN DEFAULT FALSE,         -- สิทธิ์ในการขาย
+    role VARCHAR(50),                         -- เช่น 'buyer', 'seller'
+    is_seller BOOLEAN DEFAULT FALSE,          -- สิทธิ์ในการขาย
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    stripe_customer_id VARCHAR(255),         -- เพิ่มสำหรับ Stripe
+    stripe_customer_id VARCHAR(255),          -- เพิ่มสำหรับ Stripe
     citizen_id VARCHAR(13)
 );
 
